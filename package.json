@@ -1,0 +1,45 @@
+{
+  "name": "commit-helper",
+  "version": "0.0.1",
+  "description": "A package to intercept git commit messages and prompt for user input via a GUI application.",
+  "main": "src/main/index.js",
+  "bin": {},
+  "scripts": {
+    "dev": "vite --mode development",
+    "electron": "electron .",
+    "build": "vite build --mode production",
+    "prod": "vite build && electron .",
+    "test": "node test-app.js",
+    "test:commit": "node hooks/commit-msg.js",
+    "postinstall": "node scripts/install-hooks.js"
+  },
+  "devDependencies": {
+    "electron": "^37.3.1",
+    "@vitejs/plugin-vue": "^5.0.4",
+    "vite": "^6.0.1",
+    "electron-builder": "^25.1.8"
+  },
+  "dependencies": {
+    "vue": "^3.4.27"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yourusername/commit-helper.git"
+  },
+  "keywords": [
+    "git",
+    "commit",
+    "helper",
+    "hook",
+    "message"
+  ],
+  "author": "Baker Kong",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/commit-helper/issues"
+  },
+  "homepage": "https://github.com/yourusername/commit-helper#readme"
+}
