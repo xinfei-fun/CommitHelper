@@ -1,0 +1,136 @@
+{
+  "preCommitTypes": [
+    {
+      "type": "select",
+      "title": "需求来源",
+      "prefix": "【",
+      "options": [
+        {
+          "value": "标品",
+          "label": "标品"
+        },
+        {
+          "value": "ASN",
+          "label": "ASN"
+        },
+        {
+          "value": "YW",
+          "label": "YW"
+        },
+        {
+          "value": "PXW",
+          "label": "PXW"
+        },
+        {
+          "value": "QYF",
+          "label": "QYF"
+        },
+        {
+          "value": "JS",
+          "label": "JS"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "title": "变更类型",
+      "options": [
+        {
+          "value": "需求",
+          "label": "✨迭代需求"
+        },
+        {
+          "value": "Bug",
+          "label": "🐛修复bug"
+        },
+        {
+          "value": "优化",
+          "label": "⚡️改善优化"
+        },
+        {
+          "value": "部署配置",
+          "label": "🔧部署配置"
+        },
+        {
+          "value": "重构/升级",
+          "label": "♻️重构/升级"
+        },
+        {
+          "value": "文档订正",
+          "label": "📝文档订正"
+        },
+        {
+          "value": "格式调整",
+          "label": "💄格式调整"
+        },
+        {
+          "value": "测试相关",
+          "label": "✅测试相关"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "title": "版本",
+      "suffix": "】",
+      "options": [
+        {
+          "value": "1月",
+          "label": "1月"
+        },
+        {
+          "value": "2月",
+          "label": "2月"
+        },
+        {
+          "value": "3月",
+          "label": "3月"
+        },
+        {
+          "value": "4月",
+          "label": "4月"
+        },
+        {
+          "value": "5月",
+          "label": "5月"
+        },
+        {
+          "value": "6月",
+          "label": "6月"
+        },
+        {
+          "value": "7月",
+          "label": "7月"
+        },
+        {
+          "value": "8月",
+          "label": "8月"
+        },
+        {
+          "value": "9月",
+          "label": "9月"
+        },
+        {
+          "value": "10月",
+          "label": "10月"
+        },
+        {
+          "value": "11月",
+          "label": "11月"
+        },
+        {
+          "value": "12月",
+          "label": "12月"
+        }
+      ]
+    }
+  ],
+  "appendCommitTypes": [
+    {
+      "type": "checkbox",
+      "title": "纳入标品",
+      "true-value": " - 纳入标品",
+      "false-value": ""
+    }
+  ]
+}

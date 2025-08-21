@@ -1,5 +1,7 @@
 const { app, BrowserWindow, ipcMain, Menu } = require('electron/main')
 const path = require('path')
+const fs = require('fs')
+const os = require('os')
 
 Menu.setApplicationMenu(null) // 隐藏默认菜单栏
 
@@ -68,6 +70,31 @@ app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit()
   }
+})
+
+// 加载配置
+function loadConfig() {
+  try {
+    // 从项目根目录加载配置文件
+    const configPath = path.join(process.cwd(), 'commit-helper.json')
+    if (!fs.existsSync(configPath)) {
+      throw new Error('配置文件 commit-helper.json 不存在')
+    }
+    
+    const config = JSON.parse(fs.readFileSync(configPath, 'utf8'))
+    console.log('使用配置文件:', configPath)
+    return config
+  } catch (error) {
+    console.error('加载配置失败:', error.message)
+    // 配置加载失败时退出应用
+    console.error('请确保已运行 "npx commit-helper install" 创建配置文件')
+    process.exit(1)
+  }
+}
+
+// 处理获取配置的请求
+ipcMain.handle('get-config', async () => {
+  return loadConfig()
 })
 
 // 处理命令行参数（原始提交消息）

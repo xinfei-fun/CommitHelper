@@ -5,6 +5,17 @@ const fs = require('fs');
 // 获取打包后的可执行文件路径
 const executablePath = path.join(__dirname, '../dist/commit-helper.exe');
 
+// 检查配置文件是否存在
+function checkConfigFile() {
+    const configPath = path.join(process.cwd(), 'commit-helper.json');
+    if (!fs.existsSync(configPath)) {
+        console.error('❌ commit-helper.json configuration file not found.');
+        console.error('Please run "npx commit-helper install" to create the configuration file.');
+        return false;
+    }
+    return true;
+}
+
 // 运行打包后的应用并获取用户输入的提交消息
 function runCommitHelperApp() {
     try {
@@ -37,6 +48,12 @@ function runCommitHelperApp() {
         console.log('Falling back to original commit message...');
         return -1000;
     }
+}
+
+// 检查配置文件是否存在
+if (!checkConfigFile()) {
+    console.log('Proceeding with original commit message');
+    process.exit(0);
 }
 
 // 获取用户输入的提交消息

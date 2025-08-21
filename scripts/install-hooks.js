@@ -37,9 +37,76 @@ function installGitHook(hookName, hookScript) {
     console.log(`✓ Installed ${hookName} hook`);
 }
 
+// Function to create default configuration file
+function createDefaultConfig() {
+    const configPath = path.join(process.cwd(), 'commit-helper.json');
+    
+    // Check if config file already exists
+    if (fs.existsSync(configPath)) {
+        console.log('✓ commit-helper.json already exists');
+        return;
+    }
+    
+    // Default configuration
+    const defaultConfig = {
+        "commitTypes": [
+            {
+                "value": "feat",
+                "label": "新功能",
+                "emoji": "✨"
+            },
+            {
+                "value": "fix",
+                "label": "修复bug",
+                "emoji": "🐛"
+            },
+            {
+                "value": "docs",
+                "label": "文档更新",
+                "emoji": "📝"
+            },
+            {
+                "value": "style",
+                "label": "代码格式",
+                "emoji": "💄"
+            },
+            {
+                "value": "refactor",
+                "label": "重构",
+                "emoji": "♻️"
+            },
+            {
+                "value": "perf",
+                "label": "性能优化",
+                "emoji": "⚡️"
+            },
+            {
+                "value": "test",
+                "label": "测试相关",
+                "emoji": "✅"
+            },
+            {
+                "value": "chore",
+                "label": "构建/工具",
+                "emoji": "🔧"
+            }
+        ],
+        "scopeEnabled": true,
+        "breakingChangeEnabled": true,
+        "defaultCommitType": "feat"
+    };
+    
+    // Write the default config file
+    fs.writeFileSync(configPath, JSON.stringify(defaultConfig, null, 2));
+    console.log('✓ Created default commit-helper.json configuration file');
+}
+
 // Main installation function
 function installHooks() {
     console.log('Installing Git hooks for commit-helper...');
+    
+    // Create default configuration file
+    createDefaultConfig();
     
     // Check if we're in a git repository
     if (!isGitRepository(process.cwd())) {

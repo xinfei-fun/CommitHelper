@@ -1,23 +1,23 @@
 <template>
   <div id="app">
     <div class="container">     
+      <div v-if="loading" class="loading">加载中...</div>
       
-      <div class="form-section">
+      <div v-else class="form-section">
         <div class="form-group">
           <label>提交类型:</label>
           <select v-model="commitType" class="form-control">
-            <option value="feat">✨ feat - 新功能</option>
-            <option value="fix">🐛 fix - 修复bug</option>
-            <option value="docs">📝 docs - 文档更新</option>
-            <option value="style">💄 style - 代码格式</option>
-            <option value="refactor">♻️ refactor - 重构</option>
-            <option value="perf">⚡️ perf - 性能优化</option>
-            <option value="test">✅ test - 测试相关</option>
-            <option value="chore">🔧 chore - 构建/工具</option>
+            <option 
+              v-for="type in config.commitTypes" 
+              :key="type.value" 
+              :value="type.value"
+            >
+              {{ type.emoji }} {{ type.value }} - {{ type.label }}
+            </option>
           </select>
         </div>
 
-        <div class="form-group">
+        <div v-if="config.scopeEnabled" class="form-group">
           <label>作用域 (可选):</label>
           <input 
             v-model="scope" 
@@ -37,14 +37,14 @@
           ></textarea>
         </div>
 
-        <div class="form-group">
+        <div v-if="config.breakingChangeEnabled" class="form-group">
           <label>
             <input type="checkbox" v-model="isBreakingChange">
             这是一个破坏性变更
           </label>
         </div>
 
-        <div v-if="isBreakingChange" class="form-group">
+        <div v-if="isBreakingChange && config.breakingChangeEnabled" class="form-group">
           <label>破坏性变更说明:</label>
           <textarea 
             v-model="breakingChangeDescription" 
@@ -76,34 +76,10 @@ import { ref, computed, onMounted, onUnmounted } from 'vue'
 export default {
   name: 'App',
   setup() {
-    const commitType = ref('feat')
-    const scope = ref('')
-    const description = ref('')
-    const isBreakingChange = ref(false)
-    const breakingChangeDescription = ref('')
+    
 
     // 计算格式化后的提交消息
-    const formattedMessage = computed(() => {
-      let message = commitType.value
-      
-      if (scope.value) {
-        message += `(${scope.value})`
-      }
-      
-      message += ': '
-      
-      if (isBreakingChange.value) {
-        message += 'BREAKING CHANGE: '
-      }
-      
-      message += description.value
-      
-      if (isBreakingChange.value && breakingChangeDescription.value) {
-        message += `\n\n${breakingChangeDescription.value}`
-      }
-      
-      return message
-    })
+   
 
     // 提交消息
     const submit = async () => {
@@ -133,8 +109,31 @@ export default {
       }
     }
 
+    // 获取配置
+    const loadConfig = async () => {
+      try {
+        if (window.electronAPI && window.electronAPI.getConfig) {
+          const configData = await window.electronAPI.getConfig()
+          config.value = configData
+          
+          // 设置默认提交类型
+          if (configData.defaultCommitType) {
+            commitType.value = configData.defaultCommitType
+          }
+        }
+      } catch (error) {
+        console.error('获取配置失败:', error)
+        // 使用默认配置
+        
+      } finally {
+        loading.value = false
+      }
+    }
+
     // 监听原始消息
     onMounted(() => {
+      loadConfig()
+      
       if (window.electronAPI && window.electronAPI.onOriginalMessage) {
         window.electronAPI.onOriginalMessage((event, message) => {
           if (message) {
@@ -156,6 +155,8 @@ export default {
       description,
       isBreakingChange,
       breakingChangeDescription,
+      config,
+      loading,
       formattedMessage,
       submit,
       cancel
@@ -281,5 +282,12 @@ textarea.form-control {
 
 .btn-secondary:hover {
   background: #545b62;
+}
+
+.loading {
+  text-align: center;
+  padding: 40px;
+  font-size: 16px;
+  color: #666;
 }
 </style>
