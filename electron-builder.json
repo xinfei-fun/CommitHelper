@@ -1,0 +1,26 @@
+{
+  "appId": "com.commithelper.app",
+  "productName": "Commit Helper",
+  "directories": {
+    "output": "dist"
+  },
+  "files": [
+    "dist/**/*",
+    "src/main/**/*",
+    "src/preload/**/*",
+    "node_modules/**/*"
+  ],
+  "win": {
+    "target": "portable",
+    "icon": "assets/icon.ico",
+    "artifactName": "commit-helper.exe"
+  },
+  "mac": {
+    "target": "dmg",
+    "icon": "assets/icon.icns"
+  },
+  "linux": {
+    "target": "AppImage",
+    "icon": "assets/icon.png"
+  }
+}

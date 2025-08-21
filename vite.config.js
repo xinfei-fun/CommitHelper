@@ -1,11 +1,9 @@
-import { defineConfig, loadEnv } from 'vite'
+import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { resolve } from 'path'
 
-export default defineConfig(({ mode }) => {
-  // 加载环境变量
-  const env = loadEnv(mode, process.cwd(), '')
-  
+export default defineConfig(() => {
+
   return {
     plugins: [vue()],
     base: './',
@@ -19,8 +17,8 @@ export default defineConfig(({ mode }) => {
       }
     },
     server: {
-      port: parseInt(env.VITE_DEV_SERVER_PORT || '3000'),
-      host: env.VITE_DEV_SERVER_HOST || 'localhost'
+      port: 3000,
+      host: 'localhost'
     }
   }
 })

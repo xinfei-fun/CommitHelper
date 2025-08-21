@@ -2,25 +2,24 @@ const { execSync, spawnSync } = require('child_process');
 const path = require('path');
 const fs = require('fs');
 
-// 获取 Electron 应用路径
-const electronPath = require('electron');
-const appPath = path.join(__dirname, '../src/main/index.js');
+// 获取打包后的可执行文件路径
+const executablePath = path.join(__dirname, '../dist/commit-helper.exe');
 
-// 运行 Electron 应用并获取用户输入的提交消息
-function runElectronApp() {
+// 运行打包后的应用并获取用户输入的提交消息
+function runCommitHelperApp() {
     try {
         // 读取原始的 commit message
         const originalMessage = fs.readFileSync(process.argv[2], 'utf8').trim();
 
-        // 使用 spawnSync 来运行 Electron 应用并等待其完成
-        const result = spawnSync(electronPath, [appPath, originalMessage], {
+        // 使用 spawnSync 来运行打包后的应用并等待其完成
+        const result = spawnSync(executablePath, [originalMessage], {
             stdio: 'pipe',
             encoding: 'utf8',
             timeout: 30000 // 30秒超时
         });
 
         if (result.error) {
-            console.error('Error running Electron app:', result.error.message);
+            console.error('Error running Commit Helper app:', result.error.message);
             return -1000;
         }
 
@@ -34,14 +33,14 @@ function runElectronApp() {
         const output = result.stdout.trim();
         return output;
     } catch (error) {
-        console.error('Error running Electron app:', error.message);
+        console.error('Error running Commit Helper app:', error.message);
         console.log('Falling back to original commit message...');
         return -1000;
     }
 }
 
 // 获取用户输入的提交消息
-const userMessage = runElectronApp();
+const userMessage = runCommitHelperApp();
 
 if (userMessage === -1000) {
     // 程序出错，但允许继续使用原始 message

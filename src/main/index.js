@@ -1,6 +1,7 @@
-const { app, BrowserWindow, ipcMain } = require('electron/main')
+const { app, BrowserWindow, ipcMain, Menu } = require('electron/main')
 const path = require('path')
-const fs = require('fs')
+
+Menu.setApplicationMenu(null) // 隐藏默认菜单栏
 
 let mainWindow
 
@@ -15,13 +16,14 @@ function createWindow() {
     },
     show: false, // 先不显示窗口，等准备好再显示
     resizable: false,
-    titleBarStyle: 'hiddenInset',
-    frame: false, // 移除标题栏和菜单栏
-    title: 'Commit Helper' // 设置窗口标题
+    titleBarStyle: 'default',
+    frame: true, // 显示标题栏和菜单栏
+    title: 'Git Commit Helper' // 设置窗口标题
   })
 
   // 加载 Vue 应用
   if (process.env.NODE_ENV === 'development') {
+    console.log('Development mode: loading from dev server')
     const devUrl = `http://${process.env.VITE_DEV_SERVER_HOST || 'localhost'}:${process.env.VITE_DEV_SERVER_PORT || '3000'}`
     mainWindow.loadURL(devUrl)
     mainWindow.webContents.openDevTools()

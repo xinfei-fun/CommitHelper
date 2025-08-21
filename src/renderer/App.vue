@@ -1,7 +1,6 @@
 <template>
   <div id="app">
-    <div class="container">
-      <h1>Git Commit Helper</h1>
+    <div class="container">     
       
       <div class="form-section">
         <div class="form-group">
