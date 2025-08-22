@@ -11,6 +11,7 @@
     "node_modules/**/*",
     "hooks/**/*",
     "scripts/**/*",
+    "bin/**/*",
     "commit-helper.json"
   ],
   "win": {

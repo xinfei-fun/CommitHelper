@@ -4,7 +4,7 @@
   "description": "A package to intercept git commit messages and prompt for user input via a GUI application.",
   "main": "src/main/index.js",
   "bin": {
-    "commit-helper": "./dist/commit-helper"
+    "commit-helper": "./bin/commit-helper"
   },
   "scripts": {
     "start": "concurrently --kill-others-on-fail \"npm run web:dev\" \"npm run electron:dev\"",
@@ -14,8 +14,6 @@
     "build": "npm run web:build && cross-env NODE_ENV=production electron-builder --config electron-builder.json",
     "build:win": "cross-env NODE_ENV=production electron-builder --config electron-builder.json --win",
     "build:mac": "cross-env NODE_ENV=production electron-builder --config electron-builder.json --mac",
-    "test": "node test-app.js",
-    "test:commit": "node scripts/test-commit.js",
     "postinstall": "node scripts/install-hooks.js"   
   },
   "devDependencies": {

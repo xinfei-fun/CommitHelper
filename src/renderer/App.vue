@@ -6,7 +6,8 @@
       <el-col :span="8" v-for="(field, index) in preCommitTypes" :key="index">
         <div class="form-group">
           <label>{{ field.title }}</label>
-          <el-select :offset="2" v-model="formData.fields[field.title]" :placeholder="`选择${field.title}`" style="width: 100%" :show-arrow="false">
+          <el-select clearable :offset="2" v-model="formData.fields[field.title]" :placeholder="`选择${field.title}`"
+            style="width: 100%" :show-arrow="false">
             <el-option v-for="item in field.options" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </div>

@@ -1,0 +1,77 @@
+#!/usr/bin/env node
+
+const { spawnSync } = require('child_process');
+const path = require('path');
+const fs = require('fs');
+
+// 显示帮助信息
+function showHelp() {
+  console.log(`
+Commit Helper CLI
+
+用法:
+  npx commit-helper <command>
+
+命令:
+  install    安装 Git hooks 和配置文件
+  help       显示帮助信息
+
+示例:
+  npx commit-helper install    # 安装 Git commit-msg hook
+  `);
+}
+
+// 运行安装脚本
+function runInstall() {
+  console.log('🚀 开始安装 Commit Helper...');
+  
+  const installScriptPath = path.join(__dirname, '../scripts/install-hooks.js');
+  
+  if (!fs.existsSync(installScriptPath)) {
+    console.error('❌ 安装脚本未找到:', installScriptPath);
+    process.exit(1);
+  }
+  
+  // 使用 spawnSync 来运行安装脚本
+  const result = spawnSync('node', [installScriptPath], {
+    stdio: 'inherit',
+    encoding: 'utf8'
+  });
+  
+  if (result.error) {
+    console.error('❌ 安装失败:', result.error.message);
+    process.exit(1);
+  }
+  
+  if (result.status !== 0) {
+    console.error('❌ 安装脚本执行失败');
+    process.exit(result.status);
+  }
+  
+  console.log('✅ Commit Helper 安装完成！');
+}
+
+// 主函数
+function main() {
+  const args = process.argv.slice(2);
+  
+  if (args.length === 0 || args[0] === 'help') {
+    showHelp();
+    process.exit(0);
+  }
+  
+  const command = args[0];
+  
+  switch (command) {
+    case 'install':
+      runInstall();
+      break;
+    default:
+      console.error(`❌ 未知命令: ${command}`);
+      showHelp();
+      process.exit(1);
+  }
+}
+
+// 执行主函数
+main();
