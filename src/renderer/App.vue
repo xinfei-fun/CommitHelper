@@ -6,7 +6,7 @@
       <el-col :span="8" v-for="(field, index) in preCommitTypes" :key="index">
         <div class="form-group">
           <label>{{ field.title }}</label>
-          <el-select v-model="formData.fields[field.title]" :placeholder="`选择${field.title}`" style="width: 100%">
+          <el-select :offset="2" v-model="formData.fields[field.title]" :placeholder="`选择${field.title}`" style="width: 100%" :show-arrow="false">
             <el-option v-for="item in field.options" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </div>
@@ -56,8 +56,7 @@
 
   const formData = reactive({
     fields: {},
-    description: '',
-    originMsg: ''
+    description: ''
   })
 
   const preCommitTypes = ref([])
@@ -157,7 +156,9 @@
     if (window.electronAPI && window.electronAPI.onOriginalMessage) {
       window.electronAPI.onOriginalMessage((event, message) => {
         console.log('收到原始消息:', message)
-        formData.originMsg = message
+
+        // 将原始消息设置为描述
+        formData.description = message
       })
     }
 

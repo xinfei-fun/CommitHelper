@@ -4,19 +4,27 @@ const { spawnSync } = require('child_process');
 const path = require('path');
 const fs = require('fs');
 
+console.log('🚀 开始 commit-msg 钩子...', process.argv[2]);
+
 // 根据操作系统获取打包后的可执行文件路径
 function getExecutablePath() {
     const platform = process.platform;
-    const basePath = path.join(__dirname, '../dist');
+    const basePath = path.join(process.cwd(), 'dist');
 
     if (platform === 'win32') {
         return path.join(basePath, 'commit-helper.exe');
     } else if (platform === 'darwin') {
-        // macOS - 通常打包在 .app 包中，但这里可能需要直接的可执行文件
-        // 检查是否存在 .app 包
-        const appPath = path.join(basePath, 'Commit Helper.app/Contents/MacOS/Commit Helper');
-        if (fs.existsSync(appPath)) {
-            return appPath;
+        // macOS - 检查不同架构的 .app 包
+        const archPaths = [
+            path.join(basePath, 'mac-arm64/Commit Helper.app/Contents/MacOS/Commit'), // ARM64
+            path.join(basePath, 'mac/Commit Helper.app/Contents/MacOS/Commit'),        // x64
+            path.join(basePath, 'Commit Helper.app/Contents/MacOS/Commit')             // 传统位置
+        ];
+
+        for (const appPath of archPaths) {
+            if (fs.existsSync(appPath)) {
+                return appPath;
+            }
         }
         // 如果没有 .app 包，尝试直接的可执行文件
         return path.join(basePath, 'commit-helper');
@@ -34,6 +42,8 @@ function getExecutablePath() {
 }
 
 const executablePath = getExecutablePath();
+console.log('🚀 ~ commit-msg.js:45 ~ executablePath:', executablePath)
+
 
 // 检查配置文件是否存在
 function checkConfigFile() {
@@ -46,21 +56,19 @@ function checkConfigFile() {
     return true;
 }
 
-// 运行打包后的应用并获取用户输入的提交消息
+// 运行打包后的应用
 function runCommitHelperApp() {
     try {
-        // 读取原始的 commit message
-        const originalMessage = fs.readFileSync(process.argv[2], 'utf8').trim();
+        console.log('🚀 git提交信息临时存储文件', process.argv[2]);
 
-        // 使用 spawnSync 来运行打包后的应用并等待其完成
-        const result = spawnSync(executablePath, [originalMessage], {
-            stdio: 'pipe',
+        // 使用 spawnSync 来运行打包后的应用并等待其完成        
+        const result = spawnSync(executablePath, [process.argv[2]], {            
             encoding: 'utf8'
-        });
+        });        
 
         if (result.error) {
-            console.error('Error running Commit Helper app:', result.error.message);
-            return -1000;
+            console.error('Error running Commit Helper app:', result.error.message)
+            process.exit(1);
         }
 
         if (result.status !== 0) {
@@ -68,14 +76,12 @@ function runCommitHelperApp() {
             console.log('Commit cancelled by user');
             process.exit(1);
         }
-
-        // 从 stdout 获取提交消息
-        const output = result.stdout.trim();
-        return output;
+        
+        return 0; // 返回成功状态
     } catch (error) {
         console.error('Error running Commit Helper app:', error.message);
         console.log('Falling back to original commit message...');
-        return -1000;
+        process.exit(1);
     }
 }
 
@@ -85,20 +91,7 @@ if (!checkConfigFile()) {
     process.exit(0);
 }
 
-// 获取用户输入的提交消息
-const userMessage = runCommitHelperApp();
+// 运行提交助手应用
+runCommitHelperApp();
 
-if (userMessage === -1000) {
-    // 程序出错，但允许继续使用原始 message
-    console.log('Proceeding with original commit message');
-    process.exit(0);
-}
-
-// 检查用户是否提供了消息
-if (!userMessage) {
-    console.error('No commit message provided. Commit aborted.');
-    process.exit(1);
-}
-
-// 将消息写入 commit message 文件
-fs.writeFileSync(process.argv[2], userMessage);
+console.log('Commit message has been updated by Commit Helper');

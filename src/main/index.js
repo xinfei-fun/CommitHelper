@@ -1,7 +1,6 @@
 const { app, BrowserWindow, ipcMain, Menu } = require('electron/main')
 const path = require('path')
 const fs = require('fs')
-const os = require('os')
 
 Menu.setApplicationMenu(null) // 隐藏默认菜单栏
 
@@ -36,6 +35,25 @@ function createWindow() {
   // 窗口准备好后显示
   mainWindow.once('ready-to-show', () => {
     mainWindow.show()
+
+    // 从 COMMIT_EDITMSG 文件读取原始消息
+    let originalMessage = ''
+    try {
+      const commitMsgFilePath = path.join(process.cwd(), '.git/COMMIT_EDITMSG')
+      console.log('Git提交文件:', commitMsgFilePath)
+
+      if (commitMsgFilePath && fs.existsSync(commitMsgFilePath)) {
+        originalMessage = fs.readFileSync(commitMsgFilePath, 'utf8').trim()
+      } else {
+        console.error('Git提交文件不存在或路径无效')
+      }
+    } catch (error) {
+      console.error('读取提交消息文件失败:', error.message)
+      originalMessage = error.message
+    }
+
+    console.log('原始提交消息:', originalMessage)
+    mainWindow.webContents.send('original-message', originalMessage)
   })
 
   mainWindow.on('closed', () => {
@@ -45,9 +63,17 @@ function createWindow() {
 
 // 处理来自渲染进程的消息
 ipcMain.handle('get-commit-message', async (event, message) => {
-  // 输出提交消息到 stdout 并退出
-  console.log(message)
-  app.quit()
+  // 直接写入提交消息到 .git/COMMIT_EDITMSG 文件并退出
+  try {
+    const commitMsgFilePath = path.join(process.cwd(), '.git/COMMIT_EDITMSG')
+    console.log('回写Git提交文件:', commitMsgFilePath)
+
+    fs.writeFileSync(commitMsgFilePath, message)
+    app.quit()
+  } catch (error) {
+    console.error('写入Git提交文件失败:', error.message)
+    app.quit()
+  }
   return message
 })
 
@@ -80,7 +106,7 @@ function loadConfig() {
     if (!fs.existsSync(configPath)) {
       throw new Error('配置文件 commit-helper.json 不存在')
     }
-    
+
     const config = JSON.parse(fs.readFileSync(configPath, 'utf8'))
     console.log('使用配置文件:', configPath)
     return config
@@ -96,14 +122,3 @@ function loadConfig() {
 ipcMain.handle('get-config', async () => {
   return loadConfig()
 })
-
-// 处理命令行参数（原始提交消息）
-const originalMessage = process.argv[2] || ''
-if (originalMessage) {
-  // 将原始消息传递给渲染进程
-  app.whenReady().then(() => {
-    if (mainWindow) {
-      mainWindow.webContents.send('original-message', originalMessage)
-    }
-  })
-}
