@@ -4,17 +4,19 @@
   "description": "A package to intercept git commit messages and prompt for user input via a GUI application.",
   "main": "src/main/index.js",
   "bin": {
-    "commit-helper": "dist/commit-helper.exe"
+    "commit-helper": "./dist/commit-helper"
   },
   "scripts": {
+    "start": "concurrently --kill-others-on-fail \"npm run web:dev\" \"npm run electron:dev\"",
     "web:dev": "vite --mode development",
     "web:build": "vite build --mode production",
-    "electron": "cross-env NODE_ENV=development electron . --enable-logging",
-    "start": "concurrently --kill-others-on-fail \"npm run web:dev\" \"npm run electron\"",
+    "electron:dev": "cross-env NODE_ENV=development electron . --enable-logging",    
     "build": "npm run web:build && cross-env NODE_ENV=production electron-builder --config electron-builder.json",
+    "build:win": "cross-env NODE_ENV=production electron-builder --config electron-builder.json --win",
+    "build:mac": "cross-env NODE_ENV=production electron-builder --config electron-builder.json --mac",
     "test": "node test-app.js",
     "test:commit": "node hooks/commit-msg.js",
-    "postinstall": "node scripts/install-hooks.js"
+    "postinstall": "node scripts/install-hooks.js"   
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.4",

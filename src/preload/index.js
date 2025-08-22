@@ -8,6 +8,9 @@ contextBridge.exposeInMainWorld('electronAPI', {
   // 取消提交
   cancelCommit: () => ipcRenderer.invoke('cancel-commit'),
   
+  // 获取配置
+  getConfig: () => ipcRenderer.invoke('get-config'),
+  
   // 监听原始消息
   onOriginalMessage: (callback) => ipcRenderer.on('original-message', callback),
   

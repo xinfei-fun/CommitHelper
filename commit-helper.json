@@ -1,6 +1,7 @@
 {
   "preCommitTypes": [
     {
+      "id": 1,
       "type": "select",
       "title": "需求来源",
       "prefix": "【",
@@ -32,6 +33,7 @@
       ]
     },
     {
+      "id": 2,
       "type": "select",
       "title": "变更类型",
       "options": [
@@ -70,6 +72,7 @@
       ]
     },
     {
+      "id": 3,
       "type": "select",
       "title": "版本",
       "suffix": "】",
@@ -127,6 +130,7 @@
   ],
   "appendCommitTypes": [
     {
+      "id": 4,
       "type": "checkbox",
       "title": "纳入标品",
       "true-value": " - 纳入标品",

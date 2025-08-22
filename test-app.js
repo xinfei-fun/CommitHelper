@@ -28,4 +28,4 @@ electronProcess.on('close', (code) => {
 setTimeout(() => {
   electronProcess.kill();
   console.log('测试完成');
-}, 10000);
+}, 30000);

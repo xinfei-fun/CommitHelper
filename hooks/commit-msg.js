@@ -1,9 +1,39 @@
-const { execSync, spawnSync } = require('child_process');
+#!/usr/bin/env node
+
+const { spawnSync } = require('child_process');
 const path = require('path');
 const fs = require('fs');
 
-// 获取打包后的可执行文件路径
-const executablePath = path.join(__dirname, '../dist/commit-helper.exe');
+// 根据操作系统获取打包后的可执行文件路径
+function getExecutablePath() {
+    const platform = process.platform;
+    const basePath = path.join(__dirname, '../dist');
+
+    if (platform === 'win32') {
+        return path.join(basePath, 'commit-helper.exe');
+    } else if (platform === 'darwin') {
+        // macOS - 通常打包在 .app 包中，但这里可能需要直接的可执行文件
+        // 检查是否存在 .app 包
+        const appPath = path.join(basePath, 'Commit Helper.app/Contents/MacOS/Commit Helper');
+        if (fs.existsSync(appPath)) {
+            return appPath;
+        }
+        // 如果没有 .app 包，尝试直接的可执行文件
+        return path.join(basePath, 'commit-helper');
+    } else if (platform === 'linux') {
+        // Linux - 可能是 AppImage 或直接的可执行文件
+        const appImagePath = path.join(basePath, 'commit-helper.AppImage');
+        if (fs.existsSync(appImagePath)) {
+            return appImagePath;
+        }
+        return path.join(basePath, 'commit-helper');
+    }
+
+    // 默认回退
+    return path.join(basePath, 'commit-helper');
+}
+
+const executablePath = getExecutablePath();
 
 // 检查配置文件是否存在
 function checkConfigFile() {
@@ -25,8 +55,7 @@ function runCommitHelperApp() {
         // 使用 spawnSync 来运行打包后的应用并等待其完成
         const result = spawnSync(executablePath, [originalMessage], {
             stdio: 'pipe',
-            encoding: 'utf8',
-            timeout: 30000 // 30秒超时
+            encoding: 'utf8'
         });
 
         if (result.error) {

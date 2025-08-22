@@ -47,58 +47,25 @@ function createDefaultConfig() {
         return;
     }
     
-    // Default configuration
-    const defaultConfig = {
-        "commitTypes": [
-            {
-                "value": "feat",
-                "label": "新功能",
-                "emoji": "✨"
-            },
-            {
-                "value": "fix",
-                "label": "修复bug",
-                "emoji": "🐛"
-            },
-            {
-                "value": "docs",
-                "label": "文档更新",
-                "emoji": "📝"
-            },
-            {
-                "value": "style",
-                "label": "代码格式",
-                "emoji": "💄"
-            },
-            {
-                "value": "refactor",
-                "label": "重构",
-                "emoji": "♻️"
-            },
-            {
-                "value": "perf",
-                "label": "性能优化",
-                "emoji": "⚡️"
-            },
-            {
-                "value": "test",
-                "label": "测试相关",
-                "emoji": "✅"
-            },
-            {
-                "value": "chore",
-                "label": "构建/工具",
-                "emoji": "🔧"
-            }
-        ],
-        "scopeEnabled": true,
-        "breakingChangeEnabled": true,
-        "defaultCommitType": "feat"
-    };
+    // Get the path to the default config file in the package
+    const packageConfigPath = path.join(__dirname, '../commit-helper.json');
     
-    // Write the default config file
-    fs.writeFileSync(configPath, JSON.stringify(defaultConfig, null, 2));
-    console.log('✓ Created default commit-helper.json configuration file');
+    // Check if the default config file exists in the package
+    if (!fs.existsSync(packageConfigPath)) {
+        console.log('⚠️  Default commit-helper.json not found in package');
+        return;
+    }
+    
+    try {
+        // Read the default config from the package
+        const defaultConfig = fs.readFileSync(packageConfigPath, 'utf8');
+        
+        // Write the default config file to current directory
+        fs.writeFileSync(configPath, defaultConfig);
+        console.log('✓ Created default commit-helper.json configuration file from package template');
+    } catch (error) {
+        console.error('❌ Failed to create default configuration:', error.message);
+    }
 }
 
 // Main installation function
