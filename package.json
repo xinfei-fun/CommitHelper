@@ -1,6 +1,6 @@
 {
   "name": "@baker_kong/commit-helper",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A package to intercept git commit messages and prompt for user input via a GUI application.",
   "bin": {
     "@baker_kong/commit-helper": "./bin/commit-helper"
@@ -14,7 +14,7 @@
     "build:win": "cross-env NODE_ENV=production electron-builder --config electron-builder.json --win",
     "build:mac": "cross-env NODE_ENV=production electron-builder --config electron-builder.json --mac",
     "build:all": "npm run web:build && npm run build:win && npm run build:mac",
-    "postinstall": "node scripts/install-hooks.js"
+    "postinstall": "node ./scripts/install-hooks.js"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.4",

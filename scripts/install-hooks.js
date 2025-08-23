@@ -2,6 +2,18 @@ const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 
+// Function to detect project root directory
+function getProjectRoot() {
+    // 情况1：通过 npm postinstall 调用，使用 INIT_CWD 环境变量
+    if (process.env.INIT_CWD) {
+        return process.env.INIT_CWD;
+    }
+    
+    // 情况2：回退到当前目录（可能是通过 CLI 命令调用）
+    // 如果是通过 CLI 命令调用，当前目录就是项目根目录
+    return process.cwd();
+}
+
 // Function to check if a directory is a git repository
 function isGitRepository(dir) {
     try {
@@ -14,7 +26,8 @@ function isGitRepository(dir) {
 
 // Function to install git hook
 function installGitHook(hookName, hookScript) {
-    const hooksDir = path.join(process.cwd(), '.git', 'hooks');
+    const projectRoot = getProjectRoot();
+    const hooksDir = path.join(projectRoot, '.git', 'hooks');
     const hookPath = path.join(hooksDir, hookName);
     
     // Create hooks directory if it doesn't exist
@@ -39,7 +52,8 @@ function installGitHook(hookName, hookScript) {
 
 // Function to create default configuration file
 function createDefaultConfig() {
-    const configPath = path.join(process.cwd(), 'commit-helper.json');
+    const projectRoot = getProjectRoot();
+    const configPath = path.join(projectRoot, 'commit-helper.json');
     
     // Check if config file already exists
     if (fs.existsSync(configPath)) {
@@ -76,7 +90,8 @@ function installHooks() {
     createDefaultConfig();
     
     // Check if we're in a git repository
-    if (!isGitRepository(process.cwd())) {
+    const projectRoot = getProjectRoot();
+    if (!isGitRepository(projectRoot)) {
         console.log('⚠️  Not in a git repository. Skipping hook installation.');
         return;
     }
