@@ -10,11 +10,12 @@
     "start": "concurrently --kill-others-on-fail \"npm run web:dev\" \"npm run electron:dev\"",
     "web:dev": "vite --mode development",
     "web:build": "vite build --mode production",
-    "electron:dev": "cross-env NODE_ENV=development electron .",    
+    "electron:dev": "cross-env NODE_ENV=development electron .",
     "build": "npm run web:build && cross-env NODE_ENV=production electron-builder --config electron-builder.json",
     "build:win": "cross-env NODE_ENV=production electron-builder --config electron-builder.json --win",
     "build:mac": "cross-env NODE_ENV=production electron-builder --config electron-builder.json --mac",
-    "postinstall": "node scripts/install-hooks.js"   
+    "build:all": "npm run web:build && npm run build:win && npm run build:mac",
+    "postinstall": "node scripts/install-hooks.js"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.4",
@@ -28,6 +29,7 @@
   "dependencies": {
     "dotenv": "^17.2.1",
     "element-plus": "^2.10.7",
+    "resolve-pkg": "^2.0.0",
     "vue": "^3.4.27"
   },
   "repository": {
@@ -48,5 +50,12 @@
   "bugs": {
     "url": "https://github.com/xinfei-fun/CommitHelper/issues"
   },
-  "homepage": "https://github.com/yourusername/commit-helper#readme"
+  "homepage": "https://github.com/xinfei-fun/CommitHelper#readme",
+  "files": [
+    "bin/",
+    "hooks/",
+    "scripts/",
+    "commit-helper.json",
+    "dist/**/*"
+  ]
 }

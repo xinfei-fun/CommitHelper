@@ -3,13 +3,19 @@
 const { spawnSync } = require('child_process');
 const path = require('path');
 const fs = require('fs');
+const resolvePkg = require('resolve-pkg');
 
 console.log('🚀 开始 commit-msg 钩子...', process.argv[2]);
 
 // 根据操作系统获取打包后的可执行文件路径
 function getExecutablePath() {
     const platform = process.platform;
-    const basePath = path.join(process.cwd(), 'dist');
+
+    // 获取当前模块的路径（npm包安装位置）
+    const packagePath = resolvePkg('commit-helper', { cwd: __dirname });
+    const basePath = packagePath || 'dist';
+    console.log('🚀 basePath:', basePath)
+
 
     if (platform === 'win32') {
         return path.join(basePath, 'commit-helper.exe');
@@ -62,9 +68,9 @@ function runCommitHelperApp() {
         console.log('🚀 git提交信息临时存储文件', process.argv[2]);
 
         // 使用 spawnSync 来运行打包后的应用并等待其完成        
-        const result = spawnSync(executablePath, [process.argv[2]], {            
+        const result = spawnSync(executablePath, [process.argv[2]], {
             encoding: 'utf8'
-        });        
+        });
 
         if (result.error) {
             console.error('Error running Commit Helper app:', result.error.message)
@@ -76,7 +82,7 @@ function runCommitHelperApp() {
             console.log('Commit cancelled by user');
             process.exit(1);
         }
-        
+
         return 0; // 返回成功状态
     } catch (error) {
         console.error('Error running Commit Helper app:', error.message);
