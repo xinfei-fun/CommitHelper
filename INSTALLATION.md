@@ -23,6 +23,8 @@ npm install
 # 构建应用
 npm run build
 
+若要构建不同型号的 macOS 应用，修改 electron-builder.json 打包平台：`"arch": ["arm64", "x64"]`
+
 # 启动开发
 npm start
 ```

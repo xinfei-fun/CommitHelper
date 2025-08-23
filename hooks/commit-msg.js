@@ -20,14 +20,18 @@ function getExecutablePath() {
     if (platform === 'win32') {
         return path.join(basePath, 'commit-helper.exe');
     } else if (platform === 'darwin') {
-        // macOS - 检查不同架构的 .app 包
-        const archPaths = [
+        // macOS - 检查不同架构的 .app 包，包括 universal build
+        const macPaths = [
+            // Universal build 路径
+            path.join(basePath, 'mac-universal/Commit Helper.app/Contents/MacOS/Commit'),
+            // 单独架构路径
             path.join(basePath, 'mac-arm64/Commit Helper.app/Contents/MacOS/Commit'), // ARM64
             path.join(basePath, 'mac/Commit Helper.app/Contents/MacOS/Commit'),        // x64
-            path.join(basePath, 'Commit Helper.app/Contents/MacOS/Commit')             // 传统位置
+            // 传统位置
+            path.join(basePath, 'Commit Helper.app/Contents/MacOS/Commit')
         ];
 
-        for (const appPath of archPaths) {
+        for (const appPath of macPaths) {
             if (fs.existsSync(appPath)) {
                 return appPath;
             }
