@@ -12,7 +12,7 @@ export default defineConfig(() => {
     ],
     base: './',
     build: {
-      outDir: 'dist',
+      outDir: 'dist/web',
       emptyOutDir: true,
       rollupOptions: {
         input: {

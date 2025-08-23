@@ -29,7 +29,7 @@ function createWindow() {
     mainWindow.loadURL(devUrl)
     mainWindow.webContents.openDevTools()
   } else {
-    mainWindow.loadFile(path.join(__dirname, '../../dist/index.html'))
+    mainWindow.loadFile(path.join(__dirname, '../../dist/web/index.html'))
   }
 
   // 窗口准备好后显示

@@ -12,8 +12,8 @@ function getExecutablePath() {
     const platform = process.platform;
 
     // 获取当前模块的路径（npm包安装位置）
-    const packagePath = resolvePkg('commit-helper', { cwd: __dirname });
-    const basePath = packagePath || 'dist';
+    const packagePath = resolvePkg('commit-helper/app', { cwd: __dirname });
+    const basePath = packagePath || 'dist/app';
     console.log('🚀 basePath:', basePath)
 
 

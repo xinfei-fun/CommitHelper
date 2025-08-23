@@ -2,7 +2,7 @@
   "appId": "com.commithelper.app",
   "productName": "Commit Helper",
   "directories": {
-    "output": "dist"
+    "output": "dist/app"
   },
   "files": [
     "dist/**/*",
