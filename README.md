@@ -28,19 +28,19 @@ npm install
 # 构建应用
 npm run build
 
-# 全局安装
-npm install -g .
+# 启动开发
+npm start
 ```
 
 ### 从 npm 安装
 
 ```bash
-npm install -D commit-helper
+npm install -D @baker_kong/commit-helper
 ```
 
 ## 📖 使用方法
 
-1. 在任意 Git 仓库中执行 `git commit` 命令
+1. 在任意 Git 仓库中执行 `git commit -m 'test'` 命令
 2. CommitHelper 窗口会自动弹出
 3. 按提示选择或填写提交信息
 4. 点击确认按钮完成提交
@@ -74,7 +74,7 @@ npm install -D commit-helper
 npm install
 
 # 开发模式
-npm run dev
+npm run start
 
 # 构建应用
 npm run build
@@ -108,7 +108,7 @@ commit-helper/
 ### Git Hook 未生效
 - 确认当前目录是 Git 仓库
 - 检查 `.git/hooks/commit-msg` 权限
-- 重新执行 `npx commit-helper install`
+- 重新执行 `npx @baker_kong/commit-helper install`
 
 ### 配置问题
 - 确保 `commit-helper.json` 存在

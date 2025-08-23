@@ -6,7 +6,7 @@
 
 - Node.js >= 18.0.0
 - Git
-- npm 或 yarn
+- npm
 
 ## 安装方式
 
@@ -23,14 +23,14 @@ npm install
 # 构建应用
 npm run build
 
-# 全局安装
-npm install -g .
+# 启动开发
+npm start
 ```
 
 ### 2. 从 npm 安装
 
 ```bash
-npm install -D commit-helper
+npm install -D @baker_kong/commit-helper
 ```
 
 ## 依赖说明
@@ -105,7 +105,7 @@ commit-helper/
 
 2. 如需重新配置：
    ```bash
-   npx commit-helper install
+   npx @baker_kong/commit-helper install
    ```
 
 ## 开发模式说明
@@ -161,22 +161,16 @@ commit-helper/
 - 检查文件权限：`chmod +x .git/hooks/commit-msg`
 - 验证 Node.js 路径正确
 
-## 环境变量
-
-可用的环境变量：
-- `NODE_ENV`: 运行环境
-- `VITE_DEV_SERVER_HOST`: 开发服务器主机
-- `VITE_DEV_SERVER_PORT`: 开发服务器端口
 
 ## 更新说明
 
 更新已安装的包：
 ```bash
-npm update -D commit-helper
+npm update -D @baker_kong/commit-helper
 ```
 
 ## 卸载说明
 
 从项目中卸载：
 ```bash
-npm uninstall -D commit-helper
+npm uninstall @baker_kong/commit-helper

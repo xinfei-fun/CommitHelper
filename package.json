@@ -1,15 +1,15 @@
 {
-  "name": "commit-helper",
-  "version": "0.0.1",
+  "name": "@baker_kong/commit-helper",
+  "version": "0.0.2",
   "description": "A package to intercept git commit messages and prompt for user input via a GUI application.",
   "bin": {
-    "commit-helper": "./bin/commit-helper"
+    "@baker_kong/commit-helper": "./bin/commit-helper"
   },
   "scripts": {
     "start": "concurrently --kill-others-on-fail \"npm run web:dev\" \"npm run electron:dev\"",
     "web:dev": "vite --mode development",
     "web:build": "vite build --mode production",
-    "electron:dev": "cross-env NODE_ENV=development electron .",
+    "electron:dev": "cross-env NODE_ENV=development electron src/main/index.js",
     "build": "npm run web:build && cross-env NODE_ENV=production electron-builder --config electron-builder.json",
     "build:win": "cross-env NODE_ENV=production electron-builder --config electron-builder.json --win",
     "build:mac": "cross-env NODE_ENV=production electron-builder --config electron-builder.json --mac",

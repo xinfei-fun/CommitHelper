@@ -10,14 +10,14 @@ function showHelp() {
 Commit Helper CLI
 
 用法:
-  npx commit-helper <command>
+  npx @baker_kong/commit-helper <command>
 
 命令:
   install    安装 Git hooks 和配置文件
   help       显示帮助信息
 
 示例:
-  npx commit-helper install    # 安装 Git commit-msg hook
+  npx @baker_kong/commit-helper install    # 安装 Git commit-msg hook
   `);
 }
 

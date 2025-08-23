@@ -1,5 +1,5 @@
 {
-  "appId": "com.commithelper.app",
+  "appId": "com.baker_kong.commit_helper",
   "productName": "Commit Helper",
   "directories": {
     "output": "dist/app"

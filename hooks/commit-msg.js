@@ -12,7 +12,7 @@ function getExecutablePath() {
     const platform = process.platform;
 
     // 获取当前模块的路径（npm包安装位置）
-    const packagePath = resolvePkg('commit-helper/app', { cwd: __dirname });
+    const packagePath = resolvePkg('@baker_kong/commit-helper/app', { cwd: __dirname });
     const basePath = packagePath || 'dist/app';
     console.log('🚀 basePath:', basePath)
 
@@ -56,7 +56,7 @@ function checkConfigFile() {
     const configPath = path.join(process.cwd(), 'commit-helper.json');
     if (!fs.existsSync(configPath)) {
         console.error('❌ commit-helper.json configuration file not found.');
-        console.error('Please run "npx commit-helper install" to create the configuration file.');
+        console.error('Please run "npx @baker_kong/commit-helper install" to create the configuration file.');
         return false;
     }
     return true;
