@@ -1,71 +1,182 @@
-# 安装和使用指南
+# CommitHelper 安装指南
 
-## 安装依赖
+本文档提供了详细的安装和开发指南。
 
-请手动执行以下命令：
+## 系统要求
+
+- Node.js >= 18.0.0
+- Git
+- npm 或 yarn
+
+## 安装方式
+
+### 1. 从源码安装（推荐）
 
 ```bash
-npm install vue@3.4.27
-npm install --save-dev @vitejs/plugin-vue@5.0.4 vite@6.0.1 electron-builder@25.1.8
+# 克隆仓库
+git clone https://github.com/xinfei-fun/CommitHelper.git
+cd CommitHelper
+
+# 安装依赖
+npm install
+
+# 构建应用
+npm run build
+
+# 全局安装
+npm install -g .
 ```
 
-## 项目结构
+### 2. 从 npm 安装
 
+```bash
+npm install -D commit-helper
 ```
-commit-helper/
-├── src/
-│   ├── main/           # Electron 主进程
-│   │   └── index.js
-│   ├── preload/        # Electron 预加载脚本
-│   │   └── index.js
-│   └── renderer/       # Vue 3 渲染进程
-│       ├── App.vue
-│       └── main.js
-├── hooks/              # Git hooks
-│   └── commit-msg.js
-├── scripts/            # 安装脚本
-│   └── install-hooks.js
-├── index.html          # Vue 入口文件
-├── vite.config.js      # Vite 配置
-└── package.json
+
+## 依赖说明
+
+核心依赖：
+```json
+{
+  "vue": "^3.4.27",
+  "electron": "^28.0.0"
+}
+```
+
+开发依赖：
+```json
+{
+  "@vitejs/plugin-vue": "^5.0.4",
+  "vite": "^6.0.1",
+  "electron-builder": "^25.1.8"
+}
 ```
 
 ## 开发命令
 
 ```bash
-# 开发模式（启动 Vite 开发服务器）
-npm run dev
+# 开发模式（同时启动 Vite 开发服务器和 Electron）
+npm run start
 
-# 构建 Vue 应用
-npm run build
+# 仅启动 Vite 开发服务器
+npm run web:dev
 
-# 运行 Electron 应用（需要先构建）
+# 仅构建前端
+npm run web:build
+
+# Electron 开发模式
 npm run electron:dev
 
-# 直接运行 Electron（使用源码）
-npm run electron
+# 完整构建
+npm run build
+
+# 特定平台构建
+npm run build:win    # Windows
+npm run build:mac    # macOS
+npm run build:all    # 全平台
 ```
 
-## 发布到 npm
+## 项目结构说明
 
-1. 确保所有测试通过
-2. 更新版本号：`npm version patch`
-3. 发布：`npm publish`
+```
+commit-helper/
+├── src/                # 源代码目录
+│   ├── main/          # Electron 主进程
+│   │   └── index.js   # 主进程入口
+│   ├── preload/       # 预加载脚本
+│   │   └── index.js   # 预加载入口
+│   └── renderer/      # Vue 3 渲染进程
+│       ├── App.vue    # 主组件
+│       └── main.js    # 渲染进程入口
+├── hooks/             # Git hooks
+│   └── commit-msg.js  # commit-msg hook
+├── scripts/           # 工具脚本
+│   └── install-hooks.js # hook 安装脚本
+├── index.html         # HTML 入口
+└── vite.config.js     # Vite 配置
+```
 
-## 安装后行为
+## 安装后配置
 
-当用户安装这个包时：
-1. `postinstall` 脚本会自动运行
-2. 会自动在当前 Git 仓库中安装 commit-msg hook
-3. 下次执行 `git commit` 时会自动弹出 Commit Helper 界面
+1. 安装完成后会自动：
+   - 创建 `commit-helper.json` 配置文件
+   - 安装 Git commit-msg hook
+   - 配置必要的环境变量
+
+2. 如需重新配置：
+   ```bash
+   npx commit-helper install
+   ```
+
+## 开发模式说明
+
+1. 前端开发
+   - 使用 Vite 开发服务器
+   - 支持热更新
+   - 默认端口：3000
+
+2. Electron 开发
+   - 开发模式下自动打开开发者工具
+   - 支持主进程日志查看
+   - 配置文件热重载
+
+## 构建说明
+
+1. 构建流程：
+   - 先构建 Vue 应用
+   - 然后打包 Electron 应用
+   - 最后生成可执行文件
+
+2. 输出目录：
+   - `dist/web`: Vue 构建文件
+   - `dist/app`: Electron 打包文件
 
 ## 故障排除
 
-如果 Electron 应用无法启动：
-- 确保所有依赖已正确安装
-- 检查 Node.js 版本 >= 18.0.0
-- 确认 Electron 已正确安装
+### 1. 安装问题
 
-如果 Git hook 不工作：
-- 检查当前目录是否是 Git 仓库
-- 确认 `.git/hooks/commit-msg` 文件存在且有执行权限
+如果安装失败：
+- 清除 npm 缓存：`npm cache clean --force`
+- 删除 node_modules：`rm -rf node_modules`
+- 重新安装：`npm install`
+
+### 2. 开发环境问题
+
+如果开发服务器启动失败：
+- 检查端口占用：`lsof -i :3000`
+- 确认 Node.js 版本
+- 检查 Vite 配置文件
+
+### 3. 构建问题
+
+如果构建失败：
+- 确保所有依赖已正确安装
+- 检查构建脚本权限
+- 查看构建日志
+
+### 4. Git Hook 问题
+
+如果 hook 不工作：
+- 确认 `.git/hooks/commit-msg` 存在
+- 检查文件权限：`chmod +x .git/hooks/commit-msg`
+- 验证 Node.js 路径正确
+
+## 环境变量
+
+可用的环境变量：
+- `NODE_ENV`: 运行环境
+- `VITE_DEV_SERVER_HOST`: 开发服务器主机
+- `VITE_DEV_SERVER_PORT`: 开发服务器端口
+
+## 更新说明
+
+更新已安装的包：
+```bash
+npm update -D commit-helper
+```
+
+## 卸载说明
+
+从项目中卸载：
+```bash
+npm uninstall -D commit-helper

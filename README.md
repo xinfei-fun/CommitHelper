@@ -1,91 +1,73 @@
-# Git Commit Helper
+# CommitHelper
 
-一个基于 Electron + Vue 3 的 Git 提交消息辅助工具，帮助用户生成符合 Conventional Commits 规范的提交消息。
+一个优雅的 Git 提交消息格式化工具，基于 Electron + Vue 3 开发。帮助开发者轻松创建符合 Conventional Commits 规范的 Git 提交消息。
 
-## 功能特性
+## ✨ 特性
 
-- 🎯 图形化界面选择提交类型
-- 📝 实时预览格式化后的提交消息
-- 🔧 支持作用域和破坏性变更
-- ⚡️ 与 Git hooks 无缝集成
-- 🎨 现代化的 Vue 3 界面
+- 🎯 图形化界面，告别手动输入
+- 📝 符合 Conventional Commits 规范
+- 🔧 可自定义提交类型和配置
+- ⚡️ 与 Git 工作流无缝集成
+- 🎨 现代化的用户界面
+- 🌈 支持表情符号
+- 🔍 实时预览提交消息
+- 🛠 支持作用域和破坏性变更标记
 
-## 安装
+## 🚀 快速开始
 
-```bash
-npm install commit-helper
-```
-
-安装后会自动配置 Git commit-msg hook。
-
-## 使用方法
-
-1. 正常使用 `git commit` 命令
-2. 系统会自动弹出 Commit Helper 界面
-3. 选择提交类型、填写相关信息
-4. 点击提交按钮完成提交
-
-## 提交类型
-
-- ✨ `feat` - 新功能
-- 🐛 `fix` - 修复 bug
-- 📝 `docs` - 文档更新
-- 💄 `style` - 代码格式
-- ♻️ `refactor` - 重构
-- ⚡️ `perf` - 性能优化
-- ✅ `test` - 测试相关
-- 🔧 `chore` - 构建/工具
-
-## 配置
-
-安装包时会自动在项目根目录创建 `commit-helper.json` 配置文件。您需要修改此文件来自定义界面选项。**配置文件是必需的**，如果没有配置文件，Commit Helper 将无法正常工作。
-
-### 安装后配置
-
-安装包后，系统会自动创建默认配置文件。您可以通过以下命令重新创建配置文件：
+### 从源码安装（推荐）
 
 ```bash
-npx commit-helper install
+# 克隆仓库
+git clone https://github.com/xinfei-fun/CommitHelper.git
+cd CommitHelper
+
+# 安装依赖
+npm install
+
+# 构建应用
+npm run build
+
+# 全局安装
+npm install -g .
 ```
 
-### 配置文件示例
+### 从 npm 安装
 
-```json
-{
-  "commitTypes": [
-    {
-      "value": "feat",
-      "label": "新功能",
-      "emoji": "✨"
-    },
-    {
-      "value": "fix",
-      "label": "修复bug",
-      "emoji": "🐛"
-    },
-    {
-      "value": "docs",
-      "label": "文档更新",
-      "emoji": "📝"
-    }
-  ],
-  "scopeEnabled": true,
-  "breakingChangeEnabled": true,
-  "defaultCommitType": "feat"
-}
+```bash
+npm install -D commit-helper
 ```
 
-### 配置选项说明
+## 📖 使用方法
 
-- `commitTypes`: 提交类型数组，每个类型包含：
-  - `value`: 提交类型值（必填）
-  - `label`: 显示标签（必填）
-  - `emoji`: 表情符号（可选）
-- `scopeEnabled`: 是否启用作用域输入框（默认：true）
-- `breakingChangeEnabled`: 是否启用破坏性变更选项（默认：true）
-- `defaultCommitType`: 默认选中的提交类型（默认："feat"）
+1. 在任意 Git 仓库中执行 `git commit` 命令
+2. CommitHelper 窗口会自动弹出
+3. 按提示选择或填写提交信息
+4. 点击确认按钮完成提交
 
-## 开发
+## ⚙️ 配置
+
+安装后会在项目根目录自动创建 `commit-helper.json` 配置文件：
+
+### 配置项说明
+
+- `preCommitTypes`: 提交信息前置选项
+  - `id`: 选项唯一标识
+  - `type`: 输入类型（select/checkbox）
+  - `title`: 选项标题
+  - `prefix`: 前缀（可选）
+  - `suffix`: 后缀（可选）
+  - `options`: 选项列表（select 类型必需）
+    - `value`: 选项值
+    - `label`: 显示文本
+- `appendCommitTypes`: 提交信息追加选项
+  - `id`: 选项唯一标识
+  - `type`: 输入类型
+  - `title`: 选项标题
+  - `true-value`: 选中值（checkbox 类型）
+  - `false-value`: 未选中值（checkbox 类型）
+
+## 🛠 开发指南
 
 ```bash
 # 安装依赖
@@ -94,20 +76,45 @@ npm install
 # 开发模式
 npm run dev
 
-# 构建
+# 构建应用
 npm run build
 
-# 运行 Electron 应用
-npm run electron:dev
+# 特定平台构建
+npm run build:win    # Windows
+npm run build:mac    # macOS
+npm run build:all    # 全平台
 ```
 
-## 技术栈
+## 📁 项目结构
 
-- Electron
-- Vue 3
-- Vite
-- Node.js
+```
+commit-helper/
+├── src/
+│   ├── main/           # Electron 主进程
+│   ├── preload/        # 预加载脚本
+│   └── renderer/       # Vue 3 渲染进程
+├── hooks/              # Git hooks
+├── scripts/            # 安装脚本
+└── [其他配置文件]
+```
 
-## 许可证
+## 🔧 故障排除
+
+### Electron 应用无法启动
+- 确保 Node.js 版本 >= 18.0.0
+- 检查依赖是否完整安装
+- 在开发模式下查看控制台错误
+
+### Git Hook 未生效
+- 确认当前目录是 Git 仓库
+- 检查 `.git/hooks/commit-msg` 权限
+- 重新执行 `npx commit-helper install`
+
+### 配置问题
+- 确保 `commit-helper.json` 存在
+- 验证配置文件格式正确
+- 尝试重新生成默认配置
+
+## 📄 许可证
 
 MIT License

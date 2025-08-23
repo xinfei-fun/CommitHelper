@@ -5,15 +5,18 @@
     "output": "dist/app"
   },
   "files": [
-    "dist/**/*",
-    "src/main/**/*",
-    "src/preload/**/*",
+    "dist/web/**/*",
+    "src/main/index.js",
+    "src/preload/index.js",
     "node_modules/**/*",
     "hooks/**/*",
     "scripts/**/*",
     "bin/**/*",
     "commit-helper.json"
   ],
+  "extraMetadata": {
+    "main": "src/main/index.js"
+  },
   "win": {
     "target": "portable",
     "icon": "assets/icon.ico",
