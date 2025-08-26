@@ -1,6 +1,6 @@
 {
   "name": "@baker_kong/commit-helper",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "A package to intercept git commit messages and prompt for user input via a GUI application.",
   "bin": {
     "@baker_kong/commit-helper": "./bin/commit-helper"
