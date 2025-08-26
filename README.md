@@ -50,7 +50,8 @@ npm install -D @baker_kong/commit-helper
 安装后会在项目根目录自动创建 `commit-helper.json` 配置文件：
 
 ### 配置项说明
-
+  
+- `disabled`: 暂时禁止钩子  
 - `preCommitTypes`: 提交信息前置选项
   - `id`: 选项唯一标识
   - `type`: 输入类型（select/checkbox）

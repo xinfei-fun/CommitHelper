@@ -1,4 +1,5 @@
 {
+  "disabled": false,
   "preCommitTypes": [
     {
       "id": 1,

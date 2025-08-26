@@ -70,6 +70,14 @@ function checkConfigFile() {
         console.error('Please run "npx @baker_kong/commit-helper install" to create the configuration file.');
         return false;
     }
+
+    // 读取配置并检查 disabled 状态
+    const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+    if (config.disabled) {
+        console.log('Commit Helper 已禁用，跳过检查');
+        return false;
+    }
+
     return true;
 }
 
@@ -87,7 +95,7 @@ function runCommitHelperApp() {
             }
         });
 
-        console.log('🚀 ~ runCommitHelperApp ~ result:', result.status)
+        console.log('🚀 应用运行结果:', result.status)
 
 
         if (result.error) {
