@@ -5,6 +5,19 @@ const path = require('path');
 const fs = require('fs');
 const resolvePkg = require('resolve-pkg');
 
+// 获取 commit 来源。Git 会将其作为第二个参数传入。
+const commitSource = process.argv[3];
+
+// 只在常规提交时运行钩子 (git commit, git commit --amend)
+// 其他情况如 merge, rebase, squash 等都会被跳过。
+if (commitSource !== 'message') {
+    // 如果 commitSource 不是 'message' (可能是 'merge', 'squash', 或者 undefined),
+    // 则打印信息并正常退出，让 Git 继续执行。
+    console.log(`Skipping commit-helper: operation is '${commitSource || 'non-standard'}', not a direct commit.`);
+    process.exit(0);
+}
+// --- 检测逻辑结束 ---
+
 // 项目根目录
 const projectRoot = process.cwd();
 
