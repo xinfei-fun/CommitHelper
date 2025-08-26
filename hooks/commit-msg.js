@@ -5,7 +5,10 @@ const path = require('path');
 const fs = require('fs');
 const resolvePkg = require('resolve-pkg');
 
-console.log('🚀 开始 commit-msg 钩子...', process.argv[2]);
+// 项目根目录
+const projectRoot = process.cwd();
+
+console.log('🚀 开始 commit-msg 钩子...', projectRoot);
 
 // 根据操作系统获取打包后的可执行文件路径
 function getExecutablePath() {
@@ -13,8 +16,10 @@ function getExecutablePath() {
 
     // 获取当前模块的路径（npm包安装位置）
     const packagePath = resolvePkg('@baker_kong/commit-helper/dist/app', { cwd: __dirname });
+    console.log('🚀 当前包路径:', packagePath)
+
     const basePath = packagePath || 'dist/app';
-    console.log('🚀 basePath:', basePath)
+    console.log('🚀 应用目录:', basePath)
 
 
     if (platform === 'win32') {
@@ -52,12 +57,14 @@ function getExecutablePath() {
 }
 
 const executablePath = getExecutablePath();
-console.log('🚀 ~ commit-msg.js:45 ~ executablePath:', executablePath)
+console.log('🚀 应用文件:', executablePath)
 
 
 // 检查配置文件是否存在
 function checkConfigFile() {
-    const configPath = path.join(process.cwd(), 'commit-helper.json');
+    const configPath = path.join(projectRoot, 'commit-helper.json');
+    console.log('🚀 配置文件:', configPath)
+
     if (!fs.existsSync(configPath)) {
         console.error('❌ commit-helper.json configuration file not found.');
         console.error('Please run "npx @baker_kong/commit-helper install" to create the configuration file.');
@@ -69,19 +76,26 @@ function checkConfigFile() {
 // 运行打包后的应用
 function runCommitHelperApp() {
     try {
-        console.log('🚀 git提交信息临时存储文件', process.argv[2]);
+        console.log('🚀 Git提交信息临时存储文件', path.join(projectRoot, '.git/COMMIT_EDITMSG'));
 
         // 使用 spawnSync 来运行打包后的应用并等待其完成        
-        const result = spawnSync(executablePath, [process.argv[2]], {
-            encoding: 'utf8'
+        const result = spawnSync(executablePath, [], {
+            encoding: 'utf8',
+            env: {
+                ...process.env, // 保留现有环境变量
+                GIT_COMMIT_HELPER_DIR: projectRoot // 添加自定义环境变量
+            }
         });
+
+        console.log('🚀 ~ runCommitHelperApp ~ result:', result.status)
+
 
         if (result.error) {
             console.error('Error running Commit Helper app:', result.error.message)
             process.exit(1);
         }
 
-        if (result.status !== 0) {
+        if (result.status !== 888) {
             // 用户取消了提交
             console.log('Commit cancelled by user');
             process.exit(1);
@@ -104,4 +118,4 @@ if (!checkConfigFile()) {
 // 运行提交助手应用
 runCommitHelperApp();
 
-console.log('Commit message has been updated by Commit Helper');
+console.log('Commit hook 运行完成');
